@@ -22,7 +22,14 @@ void handle_request(int nfd)
 
    while ((num = getline(&line, &size, network)) >= 0)
    {
-      printf("%s", line);
+      printf("Message received from client: %s", line);
+      // MODIFICATION: Use write() to send the data back to the client
+      if (write(nfd, line, num) == -1)
+      // MODIFICATION: (Optional) Standard error check
+      {
+         perror("write");
+         break;
+      }
    }
 
    free(line);

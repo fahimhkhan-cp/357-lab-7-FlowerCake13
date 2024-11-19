@@ -31,10 +31,22 @@ void send_request(int fd)
    char *line = NULL;
    size_t size;
    ssize_t num;
+   // MODIFICATION: additional variable
+   char buffer[1024];
+   ssize_t bytes_read;
 
    while ((num = getline(&line, &size, stdin)) >= 0)
    {
       write(fd, line, num);
+
+      // MODIFICATION: Read the echoed response from the server using read()
+      bytes_read = read(fd, buffer, sizeof(buffer) - 1);
+      // MODIFICATION: Check for valid string, format and print
+      if (bytes_read > 0)
+      {
+         buffer[bytes_read] = '\0'; // Null-terminate the string
+         printf("Echo from server: %s", buffer);
+      }
    }
 
    free(line);
